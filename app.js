@@ -11,6 +11,8 @@ const productsDOM = document.querySelector(".products-center");
 
 //cart
 let cart = [];
+//buttons
+let buttonsDOM = [];
 
 //getting products
 class Products {
@@ -36,7 +38,7 @@ class Products {
 //display products
 class UI {
   displayProducts(products) {
-    let result = '';
+    let result = "";
 
     products.forEach((product) => {
       result += `<article class="product">
@@ -51,15 +53,52 @@ class UI {
                 <h4>$${product.price}</h4>
             </article>`;
     });
-    productsDOM.innerHTML = result
+    productsDOM.innerHTML = result;
+  }
+
+  getBagButtons() {
+    const buttons = [...document.querySelectorAll(".bag-btn")];
+    buttonsDOM = buttons;
+
+    buttons.forEach((button) => {
+      let id = button.dataset.id;
+      //cart is defined above as an array of items
+      let inCart = cart.find((item) => item.id === id);
+      if (inCart) {
+        button.innerText = "In Cart";
+        button.disabled = true;
+      }
+      button.addEventListener("click", (e) => {
+        e.target.innerText = "In Cart";
+        e.target.disabled = true;
+        //get product from products
+        let cartItem = {...Storage.getProduct(id), amout:1};        
+        //add product to the cart
+        cart = [...cart, cartItem];       
+        //save cart in local storage
+        Storage.saveCart(cart);
+        //set cart values
+        //display cart item
+        //show the cart
+      });
+    });
   }
 }
 
 //local storage
 class Storage {
-    static saveProducts(products){
-        localStorage.setItem("products", JSON.stringify(products));
-    }
+  static saveProducts(products) {
+    localStorage.setItem("products", JSON.stringify(products));
+  }
+
+  static getProduct(id){
+      let products = JSON.parse(localStorage.getItem('products'));
+      return products.find(product => product.id === id);
+  }
+
+  static saveCart(cart){
+      localStorage.setItem('cart', JSON.stringify(cart));
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -70,8 +109,11 @@ document.addEventListener("DOMContentLoaded", () => {
   products
     .getProducts()
     .then((products) => {
-        ui.displayProducts(products)
-        Storage.saveProducts(products);
+      ui.displayProducts(products);
+      Storage.saveProducts(products);
     })
-    .catch((err) => console.error("error", err));
+    .then(() => {
+      ui.getBagButtons();
+    })
+    .catch((err) => console.error("Something went wrong: ", err));
 });
