@@ -1,11 +1,20 @@
 {
   "name": "comfyhouse",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "amar bessedik",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amarbessedik/comfy-house-e-commerse-website.git"
+  },
+  "bugs": {
+    "url": "https://github.com/amarbessedik/comfy-house-e-commerse-website/issues"
+  },
+  "homepage": "https://github.com/amarbessedik/comfy-house-e-commerse-website#readme",
+  "description": ""
 }

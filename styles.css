@@ -1,4 +1,4 @@
-  @import url("https://fonts.googleapis.com/css?family=Lato:400,700");
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700");
 
 :root {
   --primaryColor: #f09d51;
@@ -87,6 +87,7 @@ body {
   border: 1px solid var(--primaryColor);
   transition: var(--mainTransition);
   cursor: pointer;
+  text-decoration: none;
 }
 .banner-btn:hover {
   background: transparent;
@@ -247,14 +248,14 @@ body {
   color: grey;
   cursor: pointer;
 }
-.remove-item:hover{
-    color: var(--primaryColor);
+.remove-item:hover {
+  color: var(--primaryColor);
 }
-.item-quantities{
-   background: #eee;
-   padding: 5px;
-   border: 1px solid var(--primaryColor);
-   border-radius: 5px;
+.item-quantities {
+  background: #eee;
+  padding: 5px;
+  border: 1px solid var(--primaryColor);
+  border-radius: 5px;
 }
 .fa-plus,
 .fa-minus {
@@ -264,15 +265,15 @@ body {
   padding: 3px 4px;
   border-radius: 50%;
 }
-.fa-minus:hover{
-    padding: 1px 2px;
-    color: red;
-    border: 2px solid red;
+.fa-minus:hover {
+  padding: 1px 2px;
+  color: red;
+  border: 2px solid red;
 }
-.fa-plus:hover{
-    padding: 1px 2px;
-    color: rgb(11, 192, 11);
-    border: 2px solid rgb(11, 192, 11);
+.fa-plus:hover {
+  padding: 1px 2px;
+  color: rgb(11, 192, 11);
+  border: 2px solid rgb(11, 192, 11);
 }
 /*---------- End of Cart Item -------------------- */
 

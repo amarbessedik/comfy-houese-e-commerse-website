@@ -1,7 +1,7 @@
 //Set contentful headless CMS
 const client = contentful.createClient({
-  space: "**********",
-  accessToken: "**************************",
+  space: "y1zkjnc8lvp8",
+  accessToken: "CtkYKo10xA5OeLCTbpLym-5RitEA6Qqmb13nhlPoRu8",
 });
 
 //variables
@@ -29,13 +29,6 @@ class Products {
       const contentful = await client.getEntries({
         content_type: "comfyHouseProducts",
       });
-    //   console.log("contentful", contentful);
-    
-    //   get data from local json file
-    //   let results = await fetch("./products.json");
-    //   let data = await results.json();
-    //   let products = data.items;
-    
       let products = contentful.items;
       products = products.map((item) => {
         const { title, price } = item.fields;
