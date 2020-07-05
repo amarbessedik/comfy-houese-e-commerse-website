@@ -1,3 +1,9 @@
+//Set contentful headless CMS
+const client = contentful.createClient({
+  space: "**********",
+  accessToken: "**************************",
+});
+
 //variables
 const cartBtn = document.querySelector(".cart-btn");
 const closeCartBtn = document.querySelector(".close-cart");
@@ -10,7 +16,6 @@ const cartContent = document.querySelector(".cart-content");
 const productsDOM = document.querySelector(".products-center");
 const productsCenter = document.querySelector(".products");
 
-
 //cart
 let cart = [];
 //buttons
@@ -20,9 +25,18 @@ let buttonsDOM = [];
 class Products {
   async getProducts() {
     try {
-      let results = await fetch("./products.json");
-      let data = await results.json();
-      let products = data.items;
+      //Contentful client
+      const contentful = await client.getEntries({
+        content_type: "comfyHouseProducts",
+      });
+    //   console.log("contentful", contentful);
+    
+    //   get data from local json file
+    //   let results = await fetch("./products.json");
+    //   let data = await results.json();
+    //   let products = data.items;
+    
+      let products = contentful.items;
       products = products.map((item) => {
         const { title, price } = item.fields;
         const { id } = item.sys;
@@ -140,40 +154,37 @@ class UI {
     //clear cart button
     clearCartBtn.addEventListener("click", () => this.clearCart());
     //cart functionality
-    cartContent.addEventListener('click', event => {
-        if (event.target.classList.contains("remove-item")) {
-          let removeItem = event.target;
-          let id = removeItem.dataset.id;
-          cartContent.removeChild(removeItem.parentElement.parentElement);
+    cartContent.addEventListener("click", (event) => {
+      if (event.target.classList.contains("remove-item")) {
+        let removeItem = event.target;
+        let id = removeItem.dataset.id;
+        cartContent.removeChild(removeItem.parentElement.parentElement);
 
+        this.removeItem(id);
+      } else if (event.target.classList.contains("fa-plus")) {
+        let addAmount = event.target;
+        let id = addAmount.dataset.id;
+        let tempItem = cart.find((item) => item.id === id);
+        tempItem.amount += 1;
+        Storage.saveCart(cart);
+        this.setCartValues(cart);
+        addAmount.nextElementSibling.innerText = tempItem.amount;
+      } else if (event.target.classList.contains("fa-minus")) {
+        let lowerAmount = event.target;
+        let id = lowerAmount.dataset.id;
+        let tempItem = cart.find((item) => item.id === id);
+        tempItem.amount -= 1;
+
+        if (tempItem.amount > 0) {
+          Storage.saveCart(cart);
+          this.setCartValues(cart);
+          lowerAmount.previousElementSibling.innerText = tempItem.amount;
+        } else {
+          cartContent.removeChild(lowerAmount.parentElement.parentElement);
           this.removeItem(id);
-        } else if (event.target.classList.contains("fa-plus")) {
-            let addAmount = event.target;
-            let id = addAmount.dataset.id;
-            let tempItem = cart.find(item => item.id === id);
-            tempItem.amount += 1;
-            Storage.saveCart(cart);
-            this.setCartValues(cart);
-            addAmount.nextElementSibling.innerText = tempItem.amount;
-            
-        } else if (event.target.classList.contains("fa-minus")) {
-
-            let lowerAmount = event.target;
-            let id = lowerAmount.dataset.id;
-            let tempItem = cart.find((item) => item.id === id);
-            tempItem.amount -= 1;
-
-            if(tempItem.amount > 0){
-
-                Storage.saveCart(cart);
-                this.setCartValues(cart);
-                lowerAmount.previousElementSibling.innerText = tempItem.amount;
-            }else{
-                cartContent.removeChild(lowerAmount.parentElement.parentElement);
-                this.removeItem(id);
-            }
-        }                
-    })
+        }
+      }
+    });
   }
   clearCart() {
     let cartItems = cart.map((item) => item.id);
